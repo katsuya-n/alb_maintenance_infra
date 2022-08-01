@@ -28,9 +28,12 @@ module "vpc" {
 }
 
 module "subnet" {
-  source                   = "../modules/network/subnet"
-  name_prefix              = local.name_prefix
-  public_subnet_cidr_block = local.public_subnet_cidr_block
-  vpc_id                   = module.vpc.vpc_id
-  subnet_az                = local.subnet_az
+  source                           = "../modules/network/subnet"
+  name_prefix                      = local.name_prefix
+  public_subnet_alb_1a_cidr_block  = local.public_subnet_alb_1a_cidr_block
+  public_subnet_alb_1b_cidr_block  = local.public_subnet_alb_1b_cidr_block
+  private_subnet_alb_1a_cidr_block = local.private_subnet_alb_1a_cidr_block
+  vpc_id                           = module.vpc.vpc_id
+  subnet_az_1a                     = local.subnet_az_1a
+  subnet_az_1b                     = local.subnet_az_1b
 }
