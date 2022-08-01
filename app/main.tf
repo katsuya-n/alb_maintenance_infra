@@ -16,13 +16,21 @@ terraform {
       version = "4.9.0"
     }
   }
-
   required_version = "1.2.6"
-
   backend "s3" {
   }
 }
 
-resource "aws_vpc" "main" {
-  cidr_block = "10.5.0.0/16"
+module "vpc" {
+  source      = "../modules/network/vpc"
+  name_prefix = local.name_prefix
+  cidr_block  = local.cidr_block
+}
+
+module "subnet" {
+  source                   = "../modules/network/subnet"
+  name_prefix              = local.name_prefix
+  public_subnet_cidr_block = local.public_subnet_cidr_block
+  vpc_id                   = module.vpc.vpc_id
+  subnet_az                = local.subnet_az
 }
