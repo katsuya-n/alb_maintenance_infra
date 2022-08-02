@@ -55,3 +55,10 @@ module "alb" {
   sg_alb_id       = module.sg.sg_alb_id
   vpc_id          = module.vpc.vpc_id
 }
+
+module "ec2" {
+  source      = "../modules/ec2"
+  name_prefix = local.name_prefix
+  sg_id       = module.sg.sg_ec2_id
+  subnet_id   = module.subnet.subnet_private_ec2_1a_id
+}
