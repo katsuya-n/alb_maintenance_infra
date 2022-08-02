@@ -47,3 +47,11 @@ module "sg" {
   vpc_id           = module.vpc.vpc_id
   allow_cidr_block = var.allow_cidr_block
 }
+
+module "alb" {
+  source          = "../modules/alb"
+  subnet_az_1a_id = module.subnet.subnet_public_alb_1a_id
+  subnet_az_1b_id = module.subnet.subnet_public_alb_1b_id
+  sg_alb_id       = module.sg.sg_alb_id
+  vpc_id          = module.vpc.vpc_id
+}
