@@ -10,6 +10,13 @@ resource "aws_security_group" "alb" {
     protocol    = "tcp"
     cidr_blocks = [var.allow_cidr_block]
   }
+  ingress {
+    description = "my ip"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.allow_cidr_block]
+  }
 
   egress {
     from_port        = 0
@@ -30,21 +37,20 @@ resource "aws_security_group" "ec2" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "my ip"
+    description = "alb"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [var.allow_cidr_block]
+    security_groups = [aws_security_group.alb.id]
   }
+  // 検証で、ALBのsgからアクセスできるようにする
   ingress {
-    description = "my ip"
+    description = "alb"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.allow_cidr_block]
+    security_groups = [aws_security_group.alb.id]
   }
-
-  // TODO: ALBからのアクセスを許可する
 
   egress {
     from_port        = 0

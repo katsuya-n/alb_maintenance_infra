@@ -1,5 +1,6 @@
 # tfvarsから取得
 variable "allow_cidr_block" {}
+variable "key_name" {}
 
 provider "aws" {
   region = "us-west-1"
@@ -61,4 +62,7 @@ module "ec2" {
   name_prefix = local.name_prefix
   sg_id       = module.sg.sg_ec2_id
   subnet_id   = module.subnet.subnet_private_ec2_1a_id
+  bastion_sg_id       = module.sg.sg_alb_id
+  bastion_subnet_id   = module.subnet.subnet_public_alb_1a_id
+  key_name = var.key_name
 }

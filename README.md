@@ -2,6 +2,7 @@
 alb maintenance infra repository
 
 tfstate用のs3バケットを作成しておく
+EC2にアクセスできるようにキーペアを作成しておく
 
 ```bash
 $ cd app/
@@ -21,6 +22,7 @@ region = "[リージョン名]"
 
 ```
 allow_cidr_block="[EC2とALBにアクセスしたいIPアドレス]"
+key_name="[作成したキーペアのID]"
 ```
 
 ```bash
