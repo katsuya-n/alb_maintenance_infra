@@ -1,3 +1,6 @@
+# tfvarsから取得
+variable "allow_cidr_block" {}
+
 provider "aws" {
   region = "us-west-1"
 
@@ -36,4 +39,11 @@ module "subnet" {
   vpc_id                           = module.vpc.vpc_id
   subnet_az_1a                     = local.subnet_az_1a
   subnet_az_1b                     = local.subnet_az_1b
+}
+
+module "sg" {
+  source           = "../modules/network/sg"
+  name_prefix      = local.name_prefix
+  vpc_id           = module.vpc.vpc_id
+  allow_cidr_block = var.allow_cidr_block
 }
