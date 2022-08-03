@@ -31,6 +31,11 @@ module "vpc" {
   cidr_block  = local.cidr_block
 }
 
+module "eip" {
+  source      = "../modules/eip"
+  name_prefix = local.name_prefix
+}
+
 module "subnet" {
   source                           = "../modules/network/subnet"
   name_prefix                      = local.name_prefix
@@ -40,6 +45,7 @@ module "subnet" {
   vpc_id                           = module.vpc.vpc_id
   subnet_az_1a                     = local.subnet_az_1a
   subnet_az_1b                     = local.subnet_az_1b
+  eip_nat_1a_id                    = module.eip.eip_nat_1a_id
 }
 
 module "sg" {
@@ -58,11 +64,11 @@ module "alb" {
 }
 
 module "ec2" {
-  source      = "../modules/ec2"
-  name_prefix = local.name_prefix
-  sg_id       = module.sg.sg_ec2_id
-  subnet_id   = module.subnet.subnet_private_ec2_1a_id
-  bastion_sg_id       = module.sg.sg_alb_id
-  bastion_subnet_id   = module.subnet.subnet_public_alb_1a_id
-  key_name = var.key_name
+  source            = "../modules/ec2"
+  name_prefix       = local.name_prefix
+  sg_id             = module.sg.sg_ec2_id
+  subnet_id         = module.subnet.subnet_private_ec2_1a_id
+  bastion_sg_id     = module.sg.sg_alb_id
+  bastion_subnet_id = module.subnet.subnet_public_alb_1a_id
+  key_name          = var.key_name
 }

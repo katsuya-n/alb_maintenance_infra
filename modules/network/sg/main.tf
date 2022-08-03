@@ -37,18 +37,18 @@ resource "aws_security_group" "ec2" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "alb"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    description     = "alb"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
   }
   // 検証で、ALBのsgからアクセスできるようにする
   ingress {
-    description = "alb"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    description     = "alb"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
   }
 

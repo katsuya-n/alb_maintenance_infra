@@ -6,6 +6,14 @@ resource "aws_route_table" "main" {
   }
 }
 
+resource "aws_internet_gateway" "igw" {
+  vpc_id = var.vpc_id
+
+  tags = {
+    Name = "${var.name_prefix}-igw"
+  }
+}
+
 resource "aws_main_route_table_association" "main" {
   vpc_id         = var.vpc_id
   route_table_id = aws_route_table.main.id
@@ -34,26 +42,12 @@ resource "aws_subnet" "public_alb_1b" {
   }
 }
 
-resource "aws_internet_gateway" "gw" {
-  vpc_id = var.vpc_id
-
-  tags = {
-    Name = "${var.name_prefix}-gw"
-  }
-}
-
 resource "aws_route_table" "public_alb" {
   vpc_id = var.vpc_id
 
   tags = {
     Name = "${var.name_prefix}-public-route-table"
   }
-}
-
-resource "aws_route" "public" {
-  destination_cidr_block = "0.0.0.0/0"
-  route_table_id         = aws_route_table.public_alb.id
-  gateway_id             = aws_internet_gateway.gw.id
 }
 
 resource "aws_route_table_association" "public_alb_1a" {
@@ -64,6 +58,22 @@ resource "aws_route_table_association" "public_alb_1a" {
 resource "aws_route_table_association" "public_alb_1b" {
   subnet_id      = aws_subnet.public_alb_1b.id
   route_table_id = aws_route_table.public_alb.id
+}
+
+resource "aws_route" "public_alb" {
+  destination_cidr_block = "0.0.0.0/0"
+  route_table_id         = aws_route_table.public_alb.id
+  gateway_id             = aws_internet_gateway.igw.id
+}
+
+resource "aws_nat_gateway" "ng" {
+  // public subnetに作成する
+  subnet_id     = aws_subnet.public_alb_1a.id
+  allocation_id = var.eip_nat_1a_id
+
+  tags = {
+    Name = "${var.name_prefix}-ng"
+  }
 }
 
 ### private subnet
@@ -89,4 +99,10 @@ resource "aws_route_table" "private_ec2" {
 resource "aws_route_table_association" "private_ec2_1a" {
   subnet_id      = aws_subnet.private_ec2_1a.id
   route_table_id = aws_route_table.private_ec2.id
+}
+
+resource "aws_route" "private_ec2" {
+  destination_cidr_block = "0.0.0.0/0"
+  route_table_id         = aws_route_table.private_ec2.id
+  nat_gateway_id         = aws_nat_gateway.ng.id
 }
