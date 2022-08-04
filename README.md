@@ -1,6 +1,8 @@
 # alb_maintenance_infra
 alb maintenance infra repository
 
+### terraform起動
+
 tfstate用のs3バケットを作成しておく
 EC2にアクセスできるようにキーペアを作成しておく
 
@@ -29,5 +31,19 @@ key_name="[作成したキーペアのID]"
 $ terraform init -backend-config=backend.conf
 $ terraform plan
 $ terraform apply
+```
+
+### EC2作業
+
+踏み台EC2サーバー(bastion)にキーペアでアクセス。
+scpで踏み台EC2サーバーにキーペアを送信。
+sshで踏み台EC2サーバーに入り、そこからprivate subnetにあるEC2にsshでアクセス。
+
+apacheを起動する
+
+```
+$ sudo yum update
+$ sudo yum install httpd
+$ sudo systemctl start httpd.service
 ```
 
