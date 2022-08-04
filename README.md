@@ -47,3 +47,6 @@ $ sudo yum install httpd
 $ sudo systemctl start httpd.service
 ```
 
+### 構成図
+
+![](docs/alb_maintenance.png)
