@@ -16,7 +16,7 @@ resource "aws_lb" "alb" {
 
 resource "aws_lb_target_group" "alb_to_ec2" {
   // name_prefixだと文字数が多すぎたので直書き
-  name               = "lightkun-test-tg"
+  name     = "lightkun-test-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
