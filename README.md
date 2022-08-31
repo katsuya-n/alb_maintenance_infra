@@ -1,5 +1,7 @@
 # alb_maintenance_infra
-alb maintenance infra repository
+
+https://zenn.dev/lightkun/articles/f1f8a8269da4a9
+の検証リポジトリ
 
 ### terraform起動
 
